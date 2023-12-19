@@ -1,2 +1,2 @@
 <?php
-$string['pluginname'] = 'Enroll Tokens';
+$string['pluginname'] = 'Enroll tokens';
