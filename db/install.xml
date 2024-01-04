@@ -7,8 +7,8 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true"/>
-        <FIELD NAME="code" TYPE="char" LENGTH="40" NOTNULL="true"/>
         <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="code" TYPE="char" LENGTH="40" NOTNULL="true"/>
         <FIELD NAME="user_enrolments_id" TYPE="int" LENGTH="10"/>
         <FIELD NAME="group_id" TYPE="int" LENGTH="10"/>
         <FIELD NAME="extra_json" TYPE="text" NOTNULL="false"/>
