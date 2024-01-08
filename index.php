@@ -81,7 +81,7 @@ foreach ($tokens as $token) {
     echo '<td>' . s($courses[$token->course_id]) . '</td>';
     // format date as ISO8601
     echo '<td>' . userdate($token->timecreated, '%Y-%m-%dT%H:%M:%S%z') . '</td>';
-    echo '<td>' . ($token->enrolid ? get_string('yes') : get_string('no')) . '</td>';
+    echo '<td>' . ($token->user_enrolments_id ?? 'none') . '</td>';
     echo '<td>' . s($courses[$token->extra_json]) . '</td>';
     echo '</tr>';
 }
