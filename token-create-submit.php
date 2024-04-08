@@ -13,7 +13,7 @@ $quantity = required_param('quantity', PARAM_INT);
 $course = $DB->get_record('course', array('id' => $course_id));
 if (empty($course)) {
   // Redirect back to the form with an error message
-  redirect(new moodle_url('/local/enrolltokens/tokens.php'), get_string('errorcourse', 'local_enrolltokens'), null, \core\output\notification::NOTIFY_ERROR);
+  redirect(new moodle_url('/local/enrolltokens/tokens.php'), get_string('errorcourse', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
 // Validate JSON
@@ -21,14 +21,14 @@ if (!empty($extra_json)) {
   $extra_json = json_decode($extra_json);
   if (json_last_error() !== JSON_ERROR_NONE) {
     // Redirect back to the form with an error message
-    redirect(new moodle_url('/local/enrolltokens/tokens.php'), get_string('errorjson', 'local_enrolltokens'), null, \core\output\notification::NOTIFY_ERROR);
+    redirect(new moodle_url('/local/enrolltokens/tokens.php'), get_string('errorjson', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
   }
 }
 
 // Validate quantity
 if ($quantity < 1) {
   // Redirect back to the form with an error message
-  redirect(new moodle_url('/local/enrolltokens/tokens.php'), get_string('errorquantity', 'local_enrolltokens'), null, \core\output\notification::NOTIFY_ERROR);
+  redirect(new moodle_url('/local/enrolltokens/tokens.php'), get_string('errorquantity', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
 // Create tokens ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,8 +44,8 @@ for ($i = 0; $i < $quantity; $i++) {
   $token->code = $tokenPrefix . '-' . bin2hex(openssl_random_pseudo_bytes(2)) . '-' . bin2hex(openssl_random_pseudo_bytes(2)) . '-' . bin2hex(openssl_random_pseudo_bytes(2));
   $token->timecreated = time();
   $token->timemodified = time();
-  $DB->insert_record('enrol_token', $token);
+  $DB->insert_record('enrollment_tokens', $token);
 }
 
 // Redirect back to the form with a success message
-redirect(new moodle_url('/local/enrolltokens/index.php'), get_string('tokenscreated', 'local_enrolltokens', $quantity), null, \core\output\notification::NOTIFY_SUCCESS);
+redirect(new moodle_url('/local/enrolltokens/index.php'), get_string('tokenscreated', 'local_enrollment_tokens', $quantity), null, \core\output\notification::NOTIFY_SUCCESS);

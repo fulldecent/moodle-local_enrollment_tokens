@@ -1,22 +1,22 @@
-<XMLDB PATH="local/enrolltokens/db" VERSION="2023122001" COMMENT="XMLDB file for Moodle local/enrolltokens"
+<XMLDB PATH="local/enrollment_tokens/db" VERSION="2024040801" COMMENT="XMLDB file for Moodle local/enrollment_tokens"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
   <TABLES>
-    <TABLE NAME="enrol_token" COMMENT="Table for enroll tokens plugin">
+    <TABLE NAME="enrollment_tokens" COMMENT="Table for enrollment tokens plugin">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="code" TYPE="text" LENGTH="50" NOTNULL="true"/>
         <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true"/>
-        <FIELD NAME="code" TYPE="char" LENGTH="40" NOTNULL="true"/>
-        <FIELD NAME="user_enrolments_id" TYPE="int" LENGTH="10"/>
-        <FIELD NAME="group_id" TYPE="int" LENGTH="10"/>
+        <FIELD NAME="voided" TYPE="binary" LENGTH="1" NOTNULL="true"/>
+        <FIELD NAME="user_enrolments_id" TYPE="int" LENGTH="10" NOTNULL="false"/>
         <FIELD NAME="extra_json" TYPE="text" NOTNULL="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="course_id" TYPE="foreign" FIELDS="course_id" REFTABLE="course" REFFIELDS="id"/>
-        <KEY NAME="user_enrolments_id" TYPE="foreign" FIELDS="user_enrolments_id" REFTABLE="user_enrolments" REFFIELDS="id" />
+        <KEY NAME="user_enrolments_id" TYPE="foreign" FIELDS="user_enrolments_id" REFTABLE="user_enrolments" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
   </TABLES>

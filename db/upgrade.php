@@ -1,39 +1,24 @@
 <?php
 defined('MOODLE_INTERNAL') || die();
 
-function xmldb_local_enrolltokens_upgrade($oldversion) {
+function xmldb_local_enrollment_tokens_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2023122001) {
-        // Define table enrol_token to be created
-        $table = new xmldb_table('enrol_token');
+    if ($oldversion < 2024040801) {
+        // Define table enrollment_tokens to be created
+        $table = new xmldb_table('enrollment_tokens');
 
-        // Adding fields to table enrol_token
-        $id = new xmldb_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->addField($id);
-
-        $timecreated = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $table->addField($timecreated);
-
-        $timemodified = new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $table->addField($timemodified);
-
-        $code = new xmldb_field('code', XMLDB_TYPE_CHAR, '40', null, XMLDB_NOTNULL, null, null);
-        $table->addField($code);
-
-        $course_id = new xmldb_field('course_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $table->addField($course_id);
-
-        $user_enrolments_id = new xmldb_field('user_enrolments_id', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->addField($user_enrolments_id);
-
-        $group_id = new xmldb_field('group_id', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->addField($group_id);
-
-        $extraJson = new xmldb_field('extra_json', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->addField($extraJson);
+        // Adding fields to table enrollment_tokens
+        $table->addField(new xmldb_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null));
+        $table->addField(new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null));
+        $table->addField(new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null));
+        $table->addField(new xmldb_field('code', XMLDB_TYPE_CHAR, '40', null, XMLDB_NOTNULL, null, null));
+        $table->addField(new xmldb_field('course_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null));
+        $table->addField(new xmldb_field('voided', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0'));
+        $table->addField(new xmldb_field('user_enrolments_id', XMLDB_TYPE_INTEGER, '10', null, null, null, null));
+        $table->addField(new xmldb_field('extra_json', XMLDB_TYPE_TEXT, null, null, null, null, null));
 
         // Add keys to the table
         $table->addKey(new xmldb_key('primary', XMLDB_KEY_PRIMARY, array('id')));
@@ -46,7 +31,7 @@ function xmldb_local_enrolltokens_upgrade($oldversion) {
         }
 
         // Enrolltokens savepoint reached
-        upgrade_plugin_savepoint(true, 2023122001, 'local', 'enrolltokens');
+        upgrade_plugin_savepoint(true, 2024040801, 'local', 'enrollment_tokens');
     }
 
     return true;

@@ -3,8 +3,8 @@ require_once('../../config.php');
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url(new moodle_url('/local/enrolltokens/tokens.php'));
-$PAGE->set_title(get_string('activatecoursetokenss', 'local_enrolltokens'));
-$PAGE->set_heading(get_string('activatecoursetokens', 'local_enrolltokens'));
+$PAGE->set_title(get_string('activatecoursetokens', 'local_enrollment_tokens'));
+$PAGE->set_heading(get_string('activatecoursetokens', 'local_enrollment_tokens'));
 
 // test 
 
@@ -78,18 +78,18 @@ $token_codes = [$token_code]; // todo: allow multiple tokens
 
 // Validate enrollment tokens
 $enrollmentTokens = [];
-// For each token, check in enrol_token table, and ensure user_enrolments_id is null, if not found then error
+// For each token, check in enrollment_tokens table, and ensure user_enrolments_id is null, if not found then error
 foreach ($token_codes as $token_code) {
   echo 'checking token ' . $token_code . '...';
 
-  $enrollmentToken = $DB->get_record('enrol_token', ['code' => $token_code]);
+  $enrollmentToken = $DB->get_record('enrollment_tokens', ['code' => $token_code]);
   if (!$enrollmentToken) {
     // Redirect back to the form with an error message
-    redirect(new moodle_url('/local/enrolltokens/activate.php'), get_string('errortokennotfound', 'local_enrolltokens'), null, \core\output\notification::NOTIFY_ERROR);
+    redirect(new moodle_url('/local/enrolltokens/activate.php'), get_string('errortokennotfound', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
   }
   if (!empty($enrollmentToken->user_enrolments_id)) {
     // Redirect back to the form with an error message
-    redirect(new moodle_url('/local/enrolltokens/activate.php'), get_string('errortokenused', 'local_enrolltokens'), null, \core\output\notification::NOTIFY_ERROR);
+    redirect(new moodle_url('/local/enrolltokens/activate.php'), get_string('errortokenused', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
   }
   // If user is actively enrolled in course, silently proceed, but don't spend that token. It is still unspent.
   if (!empty($user)) {
@@ -172,7 +172,7 @@ foreach ($enrollmentTokens as $token) {
 
   // Mark token as used
   $token->user_enrolments_id = $user->id;
-  $DB->update_record('enrol_token', $token);
+  $DB->update_record('enrollment_tokens', $token);
 }
 
 
