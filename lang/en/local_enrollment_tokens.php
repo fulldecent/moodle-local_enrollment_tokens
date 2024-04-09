@@ -30,6 +30,14 @@ $string['studentemailaddress'] = 'Student email address';
 $string['tokens'] = 'Tokens';
 $string['enroll'] = 'Enroll';
 
-# Activate submit page
+# do-activate-token.php
+$string['erroremail'] = 'Invalid email address';
 $string['errortokennotfound'] = 'Token not found';
 $string['errortokenused'] = 'Token already used';
+$string['errormanualenrolment'] = 'Manual enrolment plugin missing';
+$string['enrolmenterror'] = 'Moodle enrollment error';
+$string['enrolmentdone'] = 'Welcome to your course!';
+$string['enrolmentdoneforotheruser'] = 'Enrollment successfully sent.';
+
+
+

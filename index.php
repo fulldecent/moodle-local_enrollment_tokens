@@ -4,7 +4,7 @@ require_login();
 require_capability('moodle/site:config', context_system::instance());
 
 $PAGE->set_context(context_system::instance());
-$PAGE->set_url(new moodle_url('/local/enrolltokens/tokens.php'));
+$PAGE->set_url(new moodle_url('/local/enrolltokens/index.php'));
 $PAGE->set_title(get_string('pluginname', 'local_enrollment_tokens'));
 $PAGE->set_heading(get_string('pluginname', 'local_enrollment_tokens'));
 
@@ -18,7 +18,7 @@ echo '<p>' . s(get_string('introduction', 'local_enrollment_tokens')) . '</p>';
 
 // UI to create a token
 echo '<h2 class="my-3">' . s(get_string('createtokens', 'local_enrollment_tokens')) . '</h2>';
-echo '<form action="token-create-submit.php" method="post">';
+echo '<form action="do-create-token.php" method="post">';
 // select a course
 echo '<div class="form-item row mb-3">';
 echo '  <div class="form-label col-sm-3 text-sm-right">';
@@ -82,6 +82,7 @@ foreach ($tokens as $token) {
     // format date as ISO8601
     echo '<td>' . userdate($token->timecreated, '%Y-%m-%dT%H:%M%z') . '</td>';
     echo '<td>' . ($token->user_enrolments_id ?? 'none') . '</td>';
+    //TODO: if not already enrolled, show a button linking to activate.php?token_code=...
     $extra_json_html = '';
     if (!empty($token->extra_json)) {
         $extra_json = json_decode($token->extra_json);

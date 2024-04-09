@@ -1,18 +1,20 @@
+// TODO: make javascript work in the Moodle way
+//
+// documentation: https://moodledev.io/docs/guides/javascript/modules
+//
+// bug report: https://github.com/moodlehq/moodle-docker/issues/287 
+
+export const init = () => {
+    window.console.log('we have been started');
+};
+
+/*
 define(['jquery'], function($) {
     return {
         init: function() {
-            function addToken(button) {
-                // Add to #tokens
-                $(button).before('<div class="input-group"><input type="text" class="form-control form-control-lg" name="token_code"><div class="input-group-append"><button class="btn btn-outline-danger" type="button" onclick="removeToken(this)">&minus;</button></div></div>');
-            }
-
-            function removeToken(button) {
-                $(button).parent().parent().remove();
-            }
-
-            $(document).ready(function() {
-                // Attach your addToken and removeToken functions to buttons
-            });
+            console.log('AMD module local_enrollment_tokens/activate is loaded and working!');
+            // You can start building your module functionality from here
         }
     };
 });
+*/

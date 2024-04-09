@@ -52,6 +52,16 @@ After you have installed this local plugin, you'll need to configure it under *S
   * [ ] Buttons allow to add or remove tokens and do a bunch at a time (TODO: need to document development process, JavaScript is complicated with Moodle plugin development)
   * [ ] Token IDs validate before they are used
 
+## Contributing notes
+
+* [ ] TODO: add link to authoritative notes for setting up a test environment // maybe? https://github.com/moodlehq/moodle-docker // after fix issue https://github.com/moodlehq/moodle-docker/issues/287
+* [ ] TODO: add link to authoritative notes for developming modules
+
+When updating the lang/*/* files, be sure to run:
+
+```sh
+php admin/cli/purge_caches.php
+```
 
 ## Project scope
 
