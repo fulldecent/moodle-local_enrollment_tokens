@@ -38,6 +38,3 @@ $string['errormanualenrolment'] = 'Manual enrolment plugin missing';
 $string['enrolmenterror'] = 'Moodle enrollment error';
 $string['enrolmentdone'] = 'Welcome to your course!';
 $string['enrolmentdoneforotheruser'] = 'Enrollment successfully sent.';
-
-
-
