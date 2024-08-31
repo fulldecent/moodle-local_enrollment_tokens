@@ -4,7 +4,7 @@ require_login();
 require_capability('moodle/site:config', context_system::instance());
 
 $PAGE->set_context(context_system::instance());
-$PAGE->set_url(new moodle_url('/local/enrolltokens/index.php'));
+$PAGE->set_url(new moodle_url('/local/enrollment_tokens/index.php'));
 $PAGE->set_title(get_string('pluginname', 'local_enrollment_tokens'));
 $PAGE->set_heading(get_string('pluginname', 'local_enrollment_tokens'));
 

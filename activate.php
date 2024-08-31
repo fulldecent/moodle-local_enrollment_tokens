@@ -6,7 +6,7 @@
 require_once('../../config.php');
 
 $PAGE->set_context(context_system::instance());
-$PAGE->set_url(new moodle_url('/local/enrolltokens/activate.php'));
+$PAGE->set_url(new moodle_url('/local/enrollment_tokens/activate.php'));
 $PAGE->set_title(get_string('activatecoursetokens', 'local_enrollment_tokens'));
 $PAGE->set_heading(get_string('activatecoursetokens', 'local_enrollment_tokens'));
 $PAGE->requires->js_call_amd('local_enrollment_tokens/activate', 'init');
