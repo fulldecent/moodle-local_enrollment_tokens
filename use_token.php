@@ -73,5 +73,8 @@ if ($userEnrolment) {
     $DB->update_record('enrollment_tokens', $token);
 }
 
-// Redirect to the dashboard
-redirect(new moodle_url('/my/'));
+// Retrieve the course ID from the token
+$course_id = $token->course_id;
+
+// Redirect to the course view page
+redirect(new moodle_url('/course/view.php', ['id' => $course_id]));
