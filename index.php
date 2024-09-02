@@ -82,7 +82,7 @@ foreach ($tokens as $token) {
     // format date as ISO8601
     echo '<td>' . userdate($token->timecreated, '%Y-%m-%dT%H:%M%z') . '</td>';
     echo '<td>' . ($token->user_enrolments_id ?? 'none') . '</td>';
-    //TODO: if not already enrolled, show a button linking to activate.php?token_code=...
+    //TODO: if not already enrolled, show a button linking to assign.php?token_code=...
     $extra_json_html = '';
     if (!empty($token->extra_json)) {
         $extra_json = json_decode($token->extra_json);

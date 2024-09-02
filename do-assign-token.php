@@ -8,7 +8,7 @@ $tokenCodes = required_param_array('token_code', PARAM_TEXT);
 
 // Validate email
 if (!validate_email($email)) {
-    redirect(new moodle_url('/local/enrollment_tokens/activate.php'), get_string('erroremail', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
+    redirect(new moodle_url('/local/enrollment_tokens/assign.php'), get_string('erroremail', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
 // Validate each token code
@@ -17,10 +17,10 @@ foreach (array_unique($tokenCodes) as $code) {
     $params = [$code];
     $token = $DB->get_record_sql($sql, $params);
     if (empty($token)) {
-        redirect(new moodle_url('/local/enrollment_tokens/activate.php'), get_string('errortokennotfound', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
+        redirect(new moodle_url('/local/enrollment_tokens/assign.php'), get_string('errortokennotfound', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
     }
     if (!empty($token->user_id)) {
-        redirect(new moodle_url('/local/enrollment_tokens/activate.php'), get_string('errortokenused', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
+        redirect(new moodle_url('/local/enrollment_tokens/assign.php'), get_string('errortokenused', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
     }
 }
 
@@ -53,14 +53,9 @@ foreach ($tokenCodes as $code) {
             }
         } catch (Exception $e) {
             error_log($e->getMessage());
-            redirect(new moodle_url('/local/enrollment_tokens/activate.php'), get_string('enrolmenterror', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
+            redirect(new moodle_url('/local/enrollment_tokens/assign.php'), get_string('enrolmenterror', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_ERROR);
         }
     }
 }
 
-// Redirect to main page
-if (!$createdNewUser && $USER->email === $email) {
-    redirect(new moodle_url('/'), get_string('enrolmentdone', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_SUCCESS);
-}
-
-redirect(new moodle_url('/local/enrollment_tokens/activate.php'), get_string('enrolmentdoneforotheruser', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_SUCCESS);
+redirect(new moodle_url('/local/enrollment_tokens/assign.php'), get_string('enrolmentdoneforotheruser', 'local_enrollment_tokens'), null, \core\output\notification::NOTIFY_SUCCESS);
