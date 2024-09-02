@@ -37,3 +37,4 @@ $string['errortokenused'] = 'Token already used';
 $string['errormanualenrolment'] = 'Manual enrolment plugin missing';
 $string['enrolmenterror'] = 'Moodle enrollment error';
 $string['enrolmentdoneforotheruser'] = 'Token successfully assigned to the user.';
+$string['assignedto'] = 'Assigned to';

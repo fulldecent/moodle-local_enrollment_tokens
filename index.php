@@ -70,7 +70,7 @@ echo '  <th>' . s(get_string('code', 'local_enrollment_tokens')) . '</th>';
 echo '  <th>' . s(get_string('courseid', 'local_enrollment_tokens')) . '</th>';
 echo '  <th>' . s(get_string('coursename', 'local_enrollment_tokens')) . '</th>';
 echo '  <th>' . s(get_string('timecreated', 'local_enrollment_tokens')) . '</th>';
-echo '  <th>' . s(get_string('enrollment', 'local_enrollment_tokens')) . '</th>';
+echo '  <th>' . s(get_string('assignedto', 'local_enrollment_tokens')) . '</th>'; // Updated column header
 echo '  <th>' . s(get_string('extrajson', 'local_enrollment_tokens')) . '</th>';
 echo '</tr>';
 foreach ($tokens as $token) {
@@ -81,8 +81,15 @@ foreach ($tokens as $token) {
     echo '<td>' . s($courses[$token->course_id]) . '</td>';
     // format date as ISO8601
     echo '<td>' . userdate($token->timecreated, '%Y-%m-%dT%H:%M%z') . '</td>';
-    echo '<td>' . ($token->user_enrolments_id ?? 'none') . '</td>';
-    //TODO: if not already enrolled, show a button linking to assign.php?token_code=...
+    // Check if token is assigned to a user
+    if ($token->user_id) {
+        $user = $DB->get_record('user', array('id' => $token->user_id), 'email');
+        $assigned_to = $user ? s($user->email) : 'none';
+    } else {
+        $assigned_to = 'none';
+    }
+    echo '<td>' . $assigned_to . '</td>';
+    // Display extra JSON
     $extra_json_html = '';
     if (!empty($token->extra_json)) {
         $extra_json = json_decode($token->extra_json);
