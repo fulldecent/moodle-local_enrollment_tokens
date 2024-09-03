@@ -1,5 +1,5 @@
 <?php
-//TODO: when adding a token (from URL, type in, paste) do these things:
+// TODO: when adding a token (from URL, type in, paste) do these things:
 // normalize I or L -> 1, O -> 0, but only in the -XXXX-XXXX-XXXX part
 // use AJAX to validate it and find the full course name
 
@@ -54,7 +54,7 @@ echo '</div>';
 echo '<div class="form-item row mb-3">';
 echo '  <div class="form-label col-sm-3 text-sm-right"></div>';
 echo '  <div class="form-setting col-sm-9">';
-echo '    <input type="submit" class="btn btn-primary btn-lg" value="' . s(get_string('enroll', 'local_enrollment_tokens')) . '">';
+echo '    <input type="submit" class="btn btn-primary btn-lg" value="' . s(get_string('assign', 'local_enrollment_tokens')) . '">';
 echo '  </div>';
 echo '</div>';
 echo '</form>';
@@ -70,37 +70,34 @@ echo '</template>';
 echo $OUTPUT->footer();
 
 // TODO: fix
-//
 // Due to errors in the moodle-docker setup we have to inject JavaScript this way
-//
-// Issue: https://github.com/moodlehq/moodle-docker/issues/287 
+// Issue: https://github.com/moodlehq/moodle-docker/issues/287
 
 echo <<<HTML
 <script>
 // Add button
 document.addEventListener('click', function (event) {
-  if (!event.target.matches('.add-token')) return;
-  const template = document.getElementById('token-template');
-  const clone = template.content.cloneNode(true);
-  document.getElementById('tokens').appendChild(clone);
-});
-
-// Delete button
-document.addEventListener('click', function (event) {
-  if (!event.target.matches('.remove-token')) return;
-  event.target.closest('.input-group').remove();
-
-  // If there are no tokens left, add one
-  const tokens = document.getElementById('tokens');
-  const token = tokens.querySelector('.input-group');
-  if (!token) {
+  if (event.target.matches('.add-token')) {
     const template = document.getElementById('token-template');
     const clone = template.content.cloneNode(true);
-    tokens.appendChild(clone);
+    document.getElementById('tokens').appendChild(clone);
+  }
+
+  // Delete button
+  if (event.target.matches('.remove-token')) {
+    event.target.closest('.input-group').remove();
+
+    // If there are no tokens left, add one
+    const tokens = document.getElementById('tokens');
+    if (!tokens.querySelector('.input-group')) {
+      const template = document.getElementById('token-template');
+      const clone = template.content.cloneNode(true);
+      tokens.appendChild(clone);
+    }
   }
 });
 
-//TODO: If student is logged in, add a hint below email field "Enroll yourself at abcd@example.com? <button>Click here.</button>"
+// TODO: If student is logged in, add a hint below email field "Enroll yourself at abcd@example.com? <button>Click here.</button>"
 
 // After email address is entered, offer hint for common errors
 const emailFixes = {
@@ -147,13 +144,5 @@ if (tokenCodes.length) {
     tokens.appendChild(clone);
   });
 }
-
-
-
-
-
-
 </script>
 HTML;
-
-

@@ -24,11 +24,11 @@ $string['errorquantity'] = 'Invalid quantity';
 $string['tokenscreated'] = '{$a} tokens created';
 
 # Activate page
-$string['activatecoursetokens'] = 'Activate enrollment tokens';
-$string['activateintroduction'] = 'Enter student email address and token(s) to enroll.';
+$string['activatecoursetokens'] = 'Assign enrollment tokens';
+$string['activateintroduction'] = 'Enter student email address and token(s) to assign.';
 $string['studentemailaddress'] = 'Student email address';
 $string['tokens'] = 'Tokens';
-$string['enroll'] = 'Enroll';
+$string['assign'] = 'Assign';
 
 # do-assign-token.php
 $string['erroremail'] = 'Invalid email address';
