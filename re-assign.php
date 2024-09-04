@@ -6,7 +6,7 @@
 require_once('../../config.php');
 
 $PAGE->set_context(context_system::instance());
-$PAGE->set_url(new moodle_url('/local/enrollment_tokens/assign.php'));
+$PAGE->set_url(new moodle_url('/local/enrollment_tokens/re-assign.php'));
 $PAGE->set_title(get_string('activatecoursetokens', 'local_enrollment_tokens'));
 $PAGE->set_heading(get_string('activatecoursetokens', 'local_enrollment_tokens'));
 $PAGE->requires->js_call_amd('local_enrollment_tokens/activate', 'init');
@@ -21,7 +21,7 @@ if (isloggedin()) {
 echo $OUTPUT->header();
 echo '<p class="lead my-5">' . s(get_string('activateintroduction', 'local_enrollment_tokens')) . '</p>';
 
-echo '<form class="lead" method="post" action="do-assign-token.php">';
+echo '<form class="lead" method="post" action="do-re-assign-token.php">';
 // input email
 echo '<div class="form-item row mb-3">';
 echo '  <div class="form-label col-sm-3 text-sm-right">';
