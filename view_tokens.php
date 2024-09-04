@@ -12,7 +12,7 @@ $PAGE->set_title('My Enrollment Tokens');
 $PAGE->set_heading('My Enrollment Tokens');
 
 // Fetch tokens associated with the logged-in user
-$sql = "SELECT t.*, ue.userid as enrolled_user_id, ue.timecreated as enrolment_time, u.email as enrolled_user_email 
+$sql = "SELECT t.*, u.email as enrolled_user_email
         FROM {enrollment_tokens} t
         LEFT JOIN {user_enrolments} ue ON t.user_enrolments_id = ue.id
         LEFT JOIN {user} u ON ue.userid = u.id
@@ -43,25 +43,26 @@ if (!empty($tokens)) {
         // Fetch course details
         $course = $DB->get_record('course', ['id' => $token->course_id], 'fullname');
         $course_name = $course ? $course->fullname : 'Unknown Course';
-
+    
         // Determine token status
-        if (!empty($token->user_enrolments_id)) {
+        if (!empty($token->used_on)) {
             $status = 'Used';
             $used_by = $token->enrolled_user_email;
-            $used_on = userdate($token->enrolment_time);
+            // Format the used_on date without leading zeros in the month and day
+            $used_on = date('Y-n-j', $token->used_on);
         } else {
             $status = 'Available';
             $used_by = '-';
             $used_on = '-';
         }
-
+    
         echo html_writer::start_tag('tr');
         echo html_writer::tag('td', format_string($token->code));
         echo html_writer::tag('td', format_string($course_name));
         echo html_writer::tag('td', $status);
         echo html_writer::tag('td', format_string($used_by));
         echo html_writer::tag('td', $used_on);
-
+    
         // Show "Use this token" button only for available tokens
         if ($status === 'Available') {
             $use_token_url = new moodle_url('/local/enrollment_tokens/use_token.php', ['token_code' => $token->code]);
@@ -73,7 +74,7 @@ if (!empty($tokens)) {
         } else {
             echo html_writer::tag('td', '-');
         }
-
+    
         echo html_writer::end_tag('tr');
     }
 
