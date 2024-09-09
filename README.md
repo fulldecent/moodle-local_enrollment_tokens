@@ -1,8 +1,8 @@
 # TODO BEFORE FIRST RELEASE
 
-- [ ] on activate.php allow to do mulitple tokens at once
+- [ ] on assign.php allow to do mulitple tokens at once
   - [ ] plus and minus tokens on javascript
-- [ ] on activate.php validate and recommend fixes for email address // see PMT code for gamil.com
+- [ ] on assign.php validate and recommend fixes for email address // see PMT code for gamil.com
 - [ ] Add testing for the case where you enroll a student and then they expire and re-enroll again
   - [ ] it must reset progress
 
@@ -48,7 +48,7 @@ After you have installed this local plugin, you'll need to configure it under *S
     * [x] From the course ID number like cprfaaed-f7df-7781
     * [x] It can't be guessed
   * [ ] Admin can directly assign to a (new) student when creating token
-* [ ] Activate page (/local/activate.php)
+* [ ] Activate page (/local/assign.php)
   * [ ] Buttons allow to add or remove tokens and do a bunch at a time (TODO: need to document development process, JavaScript is complicated with Moodle plugin development)
   * [ ] Token IDs validate before they are used
 

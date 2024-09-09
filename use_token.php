@@ -66,12 +66,17 @@ $roleId = 5; // Role ID for student
 $enrolPlugin = enrol_get_plugin('manual');
 $enrolPlugin->enrol_user($enrolinstance, $USER->id, $roleId); // Throws on error
 
-// Mark token as used
+// Mark token as used and set the timestamp
 $userEnrolment = $DB->get_record('user_enrolments', ['userid' => $USER->id, 'enrolid' => $enrolinstance->id]);
 if ($userEnrolment) {
     $token->user_enrolments_id = $userEnrolment->id;
+    $token->used_on = time(); // Set the current timestamp
     $DB->update_record('enrollment_tokens', $token);
 }
 
-// Redirect to the dashboard
-redirect(new moodle_url('/my/'));
+// Retrieve the course ID from the token
+$course_id = $token->course_id;
+
+// Redirect to the course view page
+redirect(new moodle_url('/course/view.php', ['id' => $course_id]));
+?>

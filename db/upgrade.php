@@ -19,11 +19,14 @@ function xmldb_local_enrollment_tokens_upgrade($oldversion) {
         $table->addField(new xmldb_field('voided', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0'));
         $table->addField(new xmldb_field('user_enrolments_id', XMLDB_TYPE_INTEGER, '10', null, null, null, null));
         $table->addField(new xmldb_field('extra_json', XMLDB_TYPE_TEXT, null, null, null, null, null));
+        $table->addField(new xmldb_field('user_id', XMLDB_TYPE_INTEGER, '10', null, null, null, null));
+        $table->addField(new xmldb_field('used_on', XMLDB_TYPE_INTEGER, '10', null, null, null, null));
 
         // Add keys to the table
         $table->addKey(new xmldb_key('primary', XMLDB_KEY_PRIMARY, array('id')));
         $table->addKey(new xmldb_key('course_id_fk', XMLDB_KEY_FOREIGN, array('course_id'), 'course', array('id')));
         $table->addKey(new xmldb_key('user_enrolments_id_fk', XMLDB_KEY_FOREIGN, array('user_enrolments_id'), 'user_enrolments', array('id')));
+        $table->addKey(new xmldb_key('user_id_fk', XMLDB_KEY_FOREIGN, array('user_id'), 'user', array('id')));
 
         // Create table
         if (!$dbman->table_exists($table)) {
