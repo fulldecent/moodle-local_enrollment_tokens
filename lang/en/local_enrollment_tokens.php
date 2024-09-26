@@ -1,5 +1,5 @@
 <?php
-$string['pluginname'] = 'Enrollment tokens';
+$string['pluginname'] = 'Course tokens';
 
 $string['introduction'] = 'This plugin lets you make single-use codes for courses. Then anybody can use these tokens to create an account on your Moodle instance (if they don\'t already have one) and enroll in the course.';
 
@@ -24,7 +24,7 @@ $string['errorquantity'] = 'Invalid quantity';
 $string['tokenscreated'] = '{$a} tokens created';
 
 # Activate page
-$string['activatecoursetokens'] = 'Assign enrollment tokens';
+$string['activatecoursetokens'] = 'Assign course tokens';
 $string['activateintroduction'] = 'Enter student email address and token(s) to assign.';
 $string['studentemailaddress'] = 'Student email address';
 $string['tokens'] = 'Tokens';
