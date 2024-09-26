@@ -8,8 +8,8 @@ require_login();
 // Set the URL of the page
 $PAGE->set_url(new moodle_url('/local/enrollment_tokens/view_tokens.php'));
 $PAGE->set_context(context_user::instance($USER->id));
-$PAGE->set_title('My Enrollment Tokens');
-$PAGE->set_heading('My Enrollment Tokens');
+$PAGE->set_title('My course tokens');
+$PAGE->set_heading('My course tokens');
 
 // Fetch tokens associated with the logged-in user
 $sql = "SELECT t.*, u.email as enrolled_user_email
@@ -22,7 +22,7 @@ $tokens = $DB->get_records_sql($sql, [$USER->id]);
 
 echo $OUTPUT->header();
 
-echo html_writer::tag('h3', 'My Enrollment Tokens', array('class' => 'mb-3'));
+echo html_writer::tag('h3', 'My course tokens', array('class' => 'mb-3'));
 
 if (!empty($tokens)) {
     // Start a Bootstrap table
