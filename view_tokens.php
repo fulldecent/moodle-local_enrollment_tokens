@@ -34,8 +34,8 @@ if (!empty($tokens)) {
     echo html_writer::tag('th', 'Status');
     echo html_writer::tag('th', 'Used by');
     echo html_writer::tag('th', 'Used on');
-    echo html_writer::tag('th', 'Use for yourself');
-    echo html_writer::tag('th', 'Share token');
+    echo html_writer::tag('th', 'Enroll Myself');
+    echo html_writer::tag('th', 'Enroll Somebody Else');
     echo html_writer::end_tag('tr');
     echo html_writer::end_tag('thead');
     echo html_writer::start_tag('tbody');
@@ -64,18 +64,18 @@ if (!empty($tokens)) {
         echo html_writer::tag('td', format_string($used_by));
         echo html_writer::tag('td', $used_on);
     
-        // Show "Use for yourself" button only for available tokens
+        // Show "Enroll Myself" button only for available tokens
         if ($status === 'Available') {
             $use_token_url = new moodle_url('/local/enrollment_tokens/use_token.php', ['token_code' => $token->code]);
-            $use_button = html_writer::tag('a', 'Use for yourself', array(
+            $use_button = html_writer::tag('a', 'Enroll Myself', array(
                 'href' => $use_token_url->out(),
                 'class' => 'btn btn-primary'
             ));
             echo html_writer::tag('td', $use_button);
 
-            // Add "Share Token" button
+            // Add "Enroll Somebody Else" button
             $share_token_url = "https://learn.pacificmedicaltraining.com/local/enrollment_tokens/re-assign.php?token=" . $token->code;
-            $share_button = html_writer::tag('button', 'Share token', array(
+            $share_button = html_writer::tag('button', 'Enroll Somebody Else', array(
                 'class' => 'btn btn-secondary',
                 'onclick' => "navigator.clipboard.writeText('{$share_token_url}').then(function() { alert('Link copied to clipboard. Share the link.'); });"
             ));
