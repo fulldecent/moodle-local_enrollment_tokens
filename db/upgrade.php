@@ -33,31 +33,49 @@ function xmldb_local_enrollment_tokens_upgrade($oldversion) {
         // Enrolltokens savepoint reached
         upgrade_plugin_savepoint(true, 2024040801, 'local', 'enrollment_tokens');
     }
-    if($oldversion < 20240909){
+
+    if ($oldversion < 20241019) {
         $table = new xmldb_table('enrollment_tokens');
-        $table->addField(new xmldb_field('user_id', XMLDB_TYPE_INTEGER, '10', null, null, null, null));
-        $table->addField(new xmldb_field('used_on', XMLDB_TYPE_INTEGER, '10', null, null, null, null));
-        $table->addKey(new xmldb_key('user_id_fk', XMLDB_KEY_FOREIGN, array('user_id'), 'user', array('id')));
+        
+        // Adding fields if they don't exist
+        if (!$dbman->field_exists($table, 'user_id')) {
+            $table->addField(new xmldb_field('user_id', XMLDB_TYPE_INTEGER, '10', null, null, null, null));
+            $dbman->add_field($table, new xmldb_field('user_id'));
+        }
+
+        if (!$dbman->field_exists($table, 'used_on')) {
+            $table->addField(new xmldb_field('used_on', XMLDB_TYPE_INTEGER, '10', null, null, null, null));
+            $dbman->add_field($table, new xmldb_field('used_on'));
+        }
+
+        // Adding foreign key if the field exists
+        if ($dbman->field_exists($table, 'user_id')) {
+            $table->addKey(new xmldb_key('user_id_fk', XMLDB_KEY_FOREIGN, array('user_id'), 'user', array('id')));
+        }
+
         // Enrolltokens savepoint reached
         upgrade_plugin_savepoint(true, 20240909, 'local', 'enrollment_tokens');
     }
 
-    if ($oldversion < 2024101901) { // Use an appropriate version number for the next update
+    if ($oldversion < 2024101901) { // Update for corporate_account and created_by
         $table = new xmldb_table('enrollment_tokens');
 
         // Adding new fields
-        $table->addField(new xmldb_field('corporate_account', XMLDB_TYPE_TEXT, null, null, null, null, null)); // Corporate Account
-        $table->addField(new xmldb_field('created_by', XMLDB_TYPE_INTEGER, '10', null, null, null, null)); // Created By
+        if (!$dbman->field_exists($table, 'corporate_account')) {
+            $table->addField(new xmldb_field('corporate_account', XMLDB_TYPE_CHAR, '255', null, null, null, null)); // Corporate Account
+            $dbman->add_field($table, new xmldb_field('corporate_account'));
+        }
+
+        if (!$dbman->field_exists($table, 'created_by')) {
+            $table->addField(new xmldb_field('created_by', XMLDB_TYPE_INTEGER, '10', null, null, null, null)); // Created By
+            $dbman->add_field($table, new xmldb_field('created_by'));
+        }
 
         // Add keys for new fields
         $table->addKey(new xmldb_key('created_by_fk', XMLDB_KEY_FOREIGN, array('created_by'), 'user', array('id')));
 
-        // Update table with new fields
-        $dbman->add_field($table, new xmldb_field('corporate_account'));
-        $dbman->add_field($table, new xmldb_field('created_by'));
-
         // Enrolltokens savepoint reached
-        upgrade_plugin_savepoint(true, 20240919, 'local', 'enrollment_tokens');
+        upgrade_plugin_savepoint(true, 2024101901, 'local', 'enrollment_tokens');
     }
 
     return true;
