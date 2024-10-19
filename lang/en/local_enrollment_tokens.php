@@ -38,3 +38,13 @@ $string['errormanualenrolment'] = 'Manual enrolment plugin missing';
 $string['enrolmenterror'] = 'Moodle enrollment error';
 $string['enrolmentdoneforotheruser'] = 'Token successfully assigned to the user.';
 $string['assignedto'] = 'Assigned to';
+
+$string['token'] = 'Token';
+$string['course'] = 'Course';
+$string['createdby'] = 'Created by';
+$string['createdat'] = 'Created at';
+$string['purchaser'] = 'Purchaser';
+$string['usedby'] = 'Used by';
+$string['usedat'] = 'Used at';
+$string['email'] = "Purchaser's email";
+$string['corporateaccount'] = "Group";

@@ -42,5 +42,23 @@ function xmldb_local_enrollment_tokens_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 20240909, 'local', 'enrollment_tokens');
     }
 
+    if ($oldversion < 2024101901) { // Use an appropriate version number for the next update
+        $table = new xmldb_table('enrollment_tokens');
+
+        // Adding new fields
+        $table->addField(new xmldb_field('corporate_account', XMLDB_TYPE_TEXT, null, null, null, null, null)); // Corporate Account
+        $table->addField(new xmldb_field('created_by', XMLDB_TYPE_INTEGER, '10', null, null, null, null)); // Created By
+
+        // Add keys for new fields
+        $table->addKey(new xmldb_key('created_by_fk', XMLDB_KEY_FOREIGN, array('created_by'), 'user', array('id')));
+
+        // Update table with new fields
+        $dbman->add_field($table, new xmldb_field('corporate_account'));
+        $dbman->add_field($table, new xmldb_field('created_by'));
+
+        // Enrolltokens savepoint reached
+        upgrade_plugin_savepoint(true, 20240919, 'local', 'enrollment_tokens');
+    }
+
     return true;
 }

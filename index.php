@@ -19,7 +19,7 @@ echo '<p>' . s(get_string('introduction', 'local_enrollment_tokens')) . '</p>';
 // UI to create a token
 echo '<h2 class="my-3">' . s(get_string('createtokens', 'local_enrollment_tokens')) . '</h2>';
 echo '<form action="do-create-token.php" method="post">';
-// select a course
+// Select a course
 echo '<div class="form-item row mb-3">';
 echo '  <div class="form-label col-sm-3 text-sm-right">';
 echo '    <label for="course_id">' . s(get_string('coursename', 'local_enrollment_tokens')) . '</label>';
@@ -29,7 +29,28 @@ echo '  <div class="form-setting col-sm-9">';
 echo html_writer::select($courses, 'course_id', '', get_string('coursename', 'local_enrollment_tokens'));
 echo '  </div>';
 echo '</div>';
-// extra JSON
+// Email
+echo '<div class="form-item row mb-3">';
+echo '  <div class="form-label col-sm-3 text-sm-right">';
+echo '    <label for="email">' . s(get_string('email', 'local_enrollment_tokens')) . '</label>';
+echo '    <span class="form-shortname d-block small text-muted">enrollment_tokens | email</span>';
+echo '  </div>';
+echo '  <div class="form-setting col-sm-9">';
+echo '    <input type="email" class="form-control" id="email" name="email" required>';
+echo '  </div>';
+echo '</div>';
+// Corporate Account (optional)
+echo '<div class="form-item row mb-3">';
+echo '  <div class="form-label col-sm-3 text-sm-right">';
+echo '    <label for="corporate_account">' . s(get_string('corporateaccount', 'local_enrollment_tokens')) . '</label>';
+echo '    <span class="form-shortname d-block small text-muted">enrollment_tokens | corporate_account</span>';
+echo '  </div>';
+echo '  <div class="form-setting col-sm-9">';
+echo '    <input type="text" class="form-control" id="corporate_account" name="corporate_account">';
+echo '    <div class="form-defaultinfo text-muted">Optional: Corporate Account</div>';
+echo '  </div>';
+echo '</div>';
+// Extra JSON
 echo '<div class="form-item row mb-3">';
 echo '  <div class="form-label col-sm-3 text-sm-right">';
 echo '    <label for="extra_json">' . s(get_string('extrajson', 'local_enrollment_tokens')) . '</label>';
@@ -40,17 +61,17 @@ echo '    <textarea class="form-control" id="extra_json" name="extra_json"></tex
 echo '    <div class="form-defaultinfo text-muted">Default: Empty</div>';
 echo '  </div>';
 echo '</div>';
-// quantity
+// Quantity
 echo '<div class="form-item row mb-3">';
 echo '  <div class="form-label col-sm-3 text-sm-right">';
 echo '    <label for="quantity">' . s(get_string('quantity', 'local_enrollment_tokens')) . '</label>';
 echo '    <span class="form-shortname d-block small text-muted">enrollment_tokens | quantity</span>';
 echo '  </div>';
 echo '  <div class="form-setting col-sm-9">';
-echo '    <input type="number" class="form-control" id="quantity" name="quantity" min="1">';
+echo '    <input type="number" class="form-control" id="quantity" name="quantity" min="1" required>';
 echo '  </div>';
 echo '</div>';
-// submit
+// Submit
 echo '<div class="form-item row mb-3">';
 echo '  <div class="form-label col-sm-3 text-sm-right"></div>';
 echo '  <div class="form-setting col-sm-9">';
@@ -65,39 +86,52 @@ echo '</form>';
 echo '<h2 class="my-3">' . s(get_string('existingtokens', 'local_enrollment_tokens')) . '</h2>';
 echo '<table class="table">';
 echo '<tr>';
-echo '  <th>' . s(get_string('id', 'local_enrollment_tokens')) . '</th>';
-echo '  <th>' . s(get_string('code', 'local_enrollment_tokens')) . '</th>';
-echo '  <th>' . s(get_string('courseid', 'local_enrollment_tokens')) . '</th>';
-echo '  <th>' . s(get_string('coursename', 'local_enrollment_tokens')) . '</th>';
-echo '  <th>' . s(get_string('timecreated', 'local_enrollment_tokens')) . '</th>';
-echo '  <th>' . s(get_string('assignedto', 'local_enrollment_tokens')) . '</th>'; // Updated column header
-echo '  <th>' . s(get_string('extrajson', 'local_enrollment_tokens')) . '</th>';
+echo '  <th>' . s(get_string('token', 'local_enrollment_tokens')) . '</th>';
+echo '  <th>' . s(get_string('course', 'local_enrollment_tokens')) . '</th>';
+echo '  <th>' . s(get_string('createdby', 'local_enrollment_tokens')) . '</th>';
+echo '  <th>' . s(get_string('createdat', 'local_enrollment_tokens')) . '</th>';
+echo '  <th>' . s(get_string('purchaser', 'local_enrollment_tokens')) . '</th>';
+echo '  <th>' . s(get_string('corporateaccount', 'local_enrollment_tokens')) . '</th>';
+echo '  <th>' . s(get_string('usedby', 'local_enrollment_tokens')) . '</th>';
+echo '  <th>' . s(get_string('usedat', 'local_enrollment_tokens')) . '</th>';
 echo '</tr>';
 foreach ($tokens as $token) {
     echo '<tr>';
-    echo '<td>' . $token->id . '</td>';
-    echo '<td>' . $token->code . '</td>';
-    echo '<td>' . $token->course_id . '</td>';
+    echo '<td>' . s($token->code) . '</td>';
     echo '<td>' . s($courses[$token->course_id]) . '</td>';
-    // format date as ISO8601
-    echo '<td>' . userdate($token->timecreated, '%Y-%m-%dT%H:%M%z') . '</td>';
-    // Check if token is assigned to a user
-    if ($token->user_id) {
-        $user = $DB->get_record('user', array('id' => $token->user_id), 'email');
-        $assigned_to = $user ? s($user->email) : 'none';
+
+    // Fetch user who created the token
+    $creator = $DB->get_record('user', array('id' => $token->created_by), 'email');
+    $created_by = $creator ? s($creator->email) : 'none';
+    echo '<td>' . $created_by . '</td>';
+
+    // Format "Created at" in ISO date format
+    $created_at = date('Y-m-d', $token->timecreated);
+    echo '<td>' . $created_at . '</td>';
+
+    // Fetch purchaser (assigned to)
+    $purchaser_email = $DB->get_field('user', 'email', array('id' => $token->user_id));
+    echo '<td>' . s($purchaser_email) . '</td>';
+
+    // Display the Corporate Account if available
+    $corporate_account = !empty($token->corporate_account) ? s($token->corporate_account) : '-';
+    echo '<td>' . $corporate_account . '</td>';
+
+    // Fetch used by and used at
+    if (!empty($token->user_enrolments_id)) {
+        // Fetch the user linked to the enrollment
+        $enrollment = $DB->get_record('user_enrolments', array('id' => $token->user_enrolments_id));
+        $used_by_user = $DB->get_record('user', array('id' => $enrollment->userid), 'email');
+        $used_by = $used_by_user ? s($used_by_user->email) : 'none';
+        // Format "Used at" in ISO date format
+        $used_at = date('Y-m-d', $token->used_on);
     } else {
-        $assigned_to = 'none';
+        $used_by = '-';
+        $used_at = '-';
     }
-    echo '<td>' . $assigned_to . '</td>';
-    // Display extra JSON
-    $extra_json_html = '';
-    if (!empty($token->extra_json)) {
-        $extra_json = json_decode($token->extra_json);
-        if (json_last_error() === JSON_ERROR_NONE) {
-            $extra_json_html = '<pre>' . s(json_encode($extra_json, JSON_PRETTY_PRINT)) . '</pre>';
-        }
-    }
-    echo '<td>' . $extra_json_html . '</td>';
+
+    echo '<td>' . s($used_by) . '</td>';
+    echo '<td>' . s($used_at) . '</td>';
     echo '</tr>';
 }
 echo '</table>';
