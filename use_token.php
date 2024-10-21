@@ -89,7 +89,7 @@ if ($enrol_email) {
         $enrol_user = $new_user;
     }
 } else {
-    $enrol_user = $USER;
+    $enrol_user = $USER; // Use the current logged-in user
 }
 
 // Enroll the user in the course
@@ -102,9 +102,10 @@ $userEnrolment = $DB->get_record('user_enrolments', ['userid' => $enrol_user->id
 if ($userEnrolment) {
     $token->user_enrolments_id = $userEnrolment->id;
     $token->used_on = time(); // Set the current timestamp
+    $token->used_by = $enrol_email ?: $USER->email; // Save the email in the used_by field; if $enrol_email is null, use current user's email
     $DB->update_record('enrollment_tokens', $token);
 }
 
 // Redirect to the course view page
-redirect(new moodle_url('/course/view.php', ['id' => $course->id]));
+redirect(new moodle_url('/course/view.php', ['id' => $course->id]));   
 ?>
