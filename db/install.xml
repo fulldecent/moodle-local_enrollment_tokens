@@ -9,13 +9,14 @@
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true"/>
         <FIELD NAME="code" TYPE="text" LENGTH="50" NOTNULL="true"/>
         <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true"/>
-        <FIELD NAME="voided" TYPE="binary" LENGTH="1" NOTNULL="true"/>
+        <FIELD NAME="voided" TYPE="binary" LENGTH="1" NOTNULL="true"/> <!-- Changed from longblob to binary -->
         <FIELD NAME="user_enrolments_id" TYPE="int" LENGTH="10" NOTNULL="false"/>
         <FIELD NAME="extra_json" TYPE="text" NOTNULL="false"/>
         <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="false"/>
         <FIELD NAME="used_on" TYPE="int" LENGTH="10" NOTNULL="false"/>
-        <FIELD NAME="corporate_account" TYPE="text" NOTNULL="false"/> <!-- New field for Corporate Account -->
+        <FIELD NAME="corporate_account" TYPE="varchar" LENGTH="255" NOTNULL="false"/> <!-- Updated type from text to varchar with length -->
         <FIELD NAME="created_by" TYPE="int" LENGTH="10" NOTNULL="false"/> <!-- New field for Created By -->
+        <FIELD NAME="used_by" TYPE="varchar" LENGTH="255" NOTNULL="false"/> <!-- Added missing field for Used By -->
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

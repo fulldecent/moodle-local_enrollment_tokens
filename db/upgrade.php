@@ -14,9 +14,9 @@ function xmldb_local_enrollment_tokens_upgrade($oldversion) {
         $table->addField(new xmldb_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null));
         $table->addField(new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null));
         $table->addField(new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null));
-        $table->addField(new xmldb_field('code', XMLDB_TYPE_CHAR, '40', null, XMLDB_NOTNULL, null, null));
+        $table->addField(new xmldb_field('code', XMLDB_TYPE_CHAR, '50', null, XMLDB_NOTNULL, null, null));
         $table->addField(new xmldb_field('course_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null));
-        $table->addField(new xmldb_field('voided', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0'));
+        $table->addField(new xmldb_field('voided', XMLDB_TYPE_BINARY, '1', null, XMLDB_NOTNULL, null, '0'));
         $table->addField(new xmldb_field('user_enrolments_id', XMLDB_TYPE_INTEGER, '10', null, null, null, null));
         $table->addField(new xmldb_field('extra_json', XMLDB_TYPE_TEXT, null, null, null, null, null));
 
@@ -69,6 +69,11 @@ function xmldb_local_enrollment_tokens_upgrade($oldversion) {
         if (!$dbman->field_exists($table, 'created_by')) {
             $table->addField(new xmldb_field('created_by', XMLDB_TYPE_INTEGER, '10', null, null, null, null)); // Created By
             $dbman->add_field($table, new xmldb_field('created_by'));
+        }
+
+        if (!$dbman->field_exists($table, 'used_by')) {
+            $table->addField(new xmldb_field('used_by', XMLDB_TYPE_CHAR, '255', null, null, null, null)); // Used By
+            $dbman->add_field($table, new xmldb_field('used_by'));
         }
 
         // Add keys for new fields
