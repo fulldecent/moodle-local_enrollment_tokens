@@ -64,23 +64,61 @@ if (!empty($tokens)) {
         echo html_writer::tag('td', format_string($used_by));
         echo html_writer::tag('td', $used_on);
     
-        // Show "Enroll Myself" button only for available tokens
-        if ($status === 'Available') {
-            $use_token_url = new moodle_url('/local/enrollment_tokens/use_token.php', ['token_code' => $token->code]);
-            $use_button = html_writer::tag('a', 'Enroll Myself', array(
-                'href' => $use_token_url->out(),
-                'class' => 'btn btn-primary'
-            ));
-            echo html_writer::tag('td', $use_button);
+// Show "Enroll Myself" button only for available tokens
+if ($status === 'Available') {
+    $use_token_url = new moodle_url('/local/enrollment_tokens/use_token.php', ['token_code' => $token->code]);
+    $use_button = html_writer::tag('a', 'Enroll Myself', array(
+        'href' => $use_token_url->out(),
+        'class' => 'btn btn-primary'
+    ));
+    echo html_writer::tag('td', $use_button);
 
-            // Add "Enroll Somebody Else" button
-            $share_token_url = "https://learn.pacificmedicaltraining.com/local/enrollment_tokens/re-assign.php?token=" . $token->code;
-            $share_button = html_writer::tag('button', 'Enroll Somebody Else', array(
-                'class' => 'btn btn-secondary',
-                'onclick' => "navigator.clipboard.writeText('{$share_token_url}').then(function() { alert('Link copied to clipboard. Share the link.'); });"
-            ));
-            echo html_writer::tag('td', $share_button);
-        } else {
+    // Add "Enroll Somebody Else" button with a modal trigger
+    $share_button = html_writer::tag('button', 'Enroll Somebody Else', array(
+        'class' => 'btn btn-secondary',
+        'data-toggle' => 'modal',
+        'data-target' => '#enrollModal' . $token->id // Ensure the modal ID is unique for each token
+    ));
+    echo html_writer::tag('td', $share_button);
+
+    // Add the modal markup
+    echo '
+    <div class="modal fade" id="enrollModal' . $token->id . '" tabindex="-1" role="dialog" aria-labelledby="enrollModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="enrollModalLabel">Enroll Somebody Else</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="enrollForm' . $token->id . '">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" class="form-control" id="firstName' . $token->id . '" name="first_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName' . $token->id . '" name="last_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailAddress">Email Address</label>
+                            <input type="email" class="form-control" id="emailAddress' . $token->id . '" name="email" required>
+                        </div>
+                        <input type="hidden" name="token_code" value="' . $token->code . '">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="submitEnrollForm(' . $token->id . ')">Enroll</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    ';
+}
+         else {
             echo html_writer::tag('td', '-');
             echo html_writer::tag('td', '-');
         }
@@ -96,4 +134,30 @@ if (!empty($tokens)) {
 }
 
 echo $OUTPUT->footer();
+
+// Add JavaScript to submit the form via AJAX
+echo '
+<script>
+    function submitEnrollForm(tokenId) {
+        var form = document.getElementById("enrollForm" + tokenId);
+        var formData = new FormData(form);
+
+        // Send the form data via AJAX
+        fetch("' . $use_token_url->out(false) . '", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            // Display success or error message, or handle redirect
+            alert("Enrollment successful");
+            location.reload();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("An error occurred while processing the enrollment.");
+        });
+    }
+</script>
+';
 ?>

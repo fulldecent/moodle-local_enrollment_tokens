@@ -36,7 +36,7 @@ if (!empty($token->user_enrolments_id)) {
     exit();
 }
 
-// Enroll the user in the course
+// Enroll in the course
 $course = $DB->get_record('course', ['id' => $token->course_id]);
 if (!$course) {
     echo $OUTPUT->header();
@@ -62,21 +62,49 @@ if (!$enrolinstance) {
     exit();
 }
 
+// Get the form parameters
+$enrol_email = optional_param('email', null, PARAM_EMAIL);
+$first_name = optional_param('first_name', 'New', PARAM_TEXT);
+$last_name = optional_param('last_name', 'User', PARAM_TEXT);
+
+// If email is provided, handle user creation or lookup
+if ($enrol_email) {
+    $enrol_user = $DB->get_record('user', ['email' => $enrol_email, 'deleted' => 0, 'suspended' => 0]);
+
+    if (!$enrol_user) {
+        // Create new user if not found
+        $new_user = new stdClass();
+        $new_user->auth = 'manual';
+        $new_user->confirmed = 1;
+        $new_user->mnethostid = $CFG->mnet_localhost_id;
+        $new_user->username = strtolower(explode('@', $enrol_email)[0]) . rand(1000, 9999);
+        $new_user->password = hash_internal_user_password('changeme');
+        $new_user->email = $enrol_email;
+        $new_user->firstname = $first_name;
+        $new_user->lastname = $last_name;
+        $new_user->timecreated = time();
+        $new_user->timemodified = time();
+
+        $new_user->id = $DB->insert_record('user', $new_user);
+        $enrol_user = $new_user;
+    }
+} else {
+    $enrol_user = $USER;
+}
+
+// Enroll the user in the course
 $roleId = 5; // Role ID for student
 $enrolPlugin = enrol_get_plugin('manual');
-$enrolPlugin->enrol_user($enrolinstance, $USER->id, $roleId); // Throws on error
+$enrolPlugin->enrol_user($enrolinstance, $enrol_user->id, $roleId); // Throws on error
 
 // Mark token as used and set the timestamp
-$userEnrolment = $DB->get_record('user_enrolments', ['userid' => $USER->id, 'enrolid' => $enrolinstance->id]);
+$userEnrolment = $DB->get_record('user_enrolments', ['userid' => $enrol_user->id, 'enrolid' => $enrolinstance->id]);
 if ($userEnrolment) {
     $token->user_enrolments_id = $userEnrolment->id;
     $token->used_on = time(); // Set the current timestamp
     $DB->update_record('enrollment_tokens', $token);
 }
 
-// Retrieve the course ID from the token
-$course_id = $token->course_id;
-
 // Redirect to the course view page
-redirect(new moodle_url('/course/view.php', ['id' => $course_id]));
+redirect(new moodle_url('/course/view.php', ['id' => $course->id]));
 ?>
