@@ -6,7 +6,7 @@ function xmldb_local_enrollment_tokens_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2024040801) {
+    if ($oldversion < 2024102201) {
         // Define table enrollment_tokens to be created
         $table = new xmldb_table('enrollment_tokens');
 
@@ -34,7 +34,7 @@ function xmldb_local_enrollment_tokens_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2024040801, 'local', 'enrollment_tokens');
     }
 
-    if ($oldversion < 20241019) {
+    if ($oldversion < 2024102201) {
         $table = new xmldb_table('enrollment_tokens');
         
         // Adding fields if they don't exist
@@ -57,13 +57,13 @@ function xmldb_local_enrollment_tokens_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 20240909, 'local', 'enrollment_tokens');
     }
 
-    if ($oldversion < 2024101901) { // Update for corporate_account and created_by
+    if ($oldversion < 2024102201) { // Update for group_account and created_by
         $table = new xmldb_table('enrollment_tokens');
 
         // Adding new fields
-        if (!$dbman->field_exists($table, 'corporate_account')) {
-            $table->addField(new xmldb_field('corporate_account', XMLDB_TYPE_CHAR, '255', null, null, null, null)); // Corporate Account
-            $dbman->add_field($table, new xmldb_field('corporate_account'));
+        if (!$dbman->field_exists($table, 'group_account')) {
+            $table->addField(new xmldb_field('group_account', XMLDB_TYPE_CHAR, '255', null, null, null, null)); // Corporate Account
+            $dbman->add_field($table, new xmldb_field('group_account'));
         }
 
         if (!$dbman->field_exists($table, 'created_by')) {

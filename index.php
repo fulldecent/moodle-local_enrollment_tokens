@@ -42,11 +42,11 @@ echo '</div>';
 // Corporate Account (optional)
 echo '<div class="form-item row mb-3">';
 echo '  <div class="form-label col-sm-3 text-sm-right">';
-echo '    <label for="corporate_account">' . s(get_string('corporateaccount', 'local_enrollment_tokens')) . '</label>';
-echo '    <span class="form-shortname d-block small text-muted">enrollment_tokens | corporate_account</span>';
+echo '    <label for="group_account">' . s(get_string('corporateaccount', 'local_enrollment_tokens')) . '</label>';
+echo '    <span class="form-shortname d-block small text-muted">enrollment_tokens | group_account</span>';
 echo '  </div>';
 echo '  <div class="form-setting col-sm-9">';
-echo '    <input type="text" class="form-control" id="corporate_account" name="corporate_account">';
+echo '    <input type="text" class="form-control" id="group_account" name="group_account">';
 echo '    <div class="form-defaultinfo text-muted">Optional: Corporate Account</div>';
 echo '  </div>';
 echo '</div>';
@@ -114,8 +114,8 @@ foreach ($tokens as $token) {
     echo '<td>' . s($purchaser_email) . '</td>';
 
     // Display the Corporate Account if available
-    $corporate_account = !empty($token->corporate_account) ? s($token->corporate_account) : '-';
-    echo '<td>' . $corporate_account . '</td>';
+    $group_account = !empty($token->group_account) ? s($token->group_account) : '-';
+    echo '<td>' . $group_account . '</td>';
 
     // Fetch used by and used at
     if (!empty($token->user_enrolments_id)) {

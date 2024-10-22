@@ -9,7 +9,7 @@ $course_id = required_param('course_id', PARAM_INT);
 $email = required_param('email', PARAM_EMAIL);
 $extra_json = optional_param('extra_json', '', PARAM_RAW);
 $quantity = required_param('quantity', PARAM_INT);
-$corporate_account = optional_param('corporate_account', '', PARAM_TEXT); // New field for Corporate Account
+$group_account = optional_param('group_account', '', PARAM_TEXT); // New field for Corporate Account
 
 // Validate course ID
 $course = $DB->get_record('course', array('id' => $course_id));
@@ -65,7 +65,7 @@ for ($i = 0; $i < $quantity; $i++) {
     $token->user_id = $user->id;
     $token->voided = '';
     $token->user_enrolments_id = null;
-    $token->corporate_account = $corporate_account; // New field for Corporate Account
+    $token->group_account = $group_account; // New field for Corporate Account
     $token->created_by = $created_by; // Store the creator's user ID
 
     // Insert the token into the database
