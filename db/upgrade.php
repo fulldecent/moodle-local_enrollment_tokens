@@ -31,7 +31,7 @@ function xmldb_local_enrollment_tokens_upgrade($oldversion) {
         }
 
         // Enrolltokens savepoint reached
-        upgrade_plugin_savepoint(true, 2024040801, 'local', 'enrollment_tokens');
+        upgrade_plugin_savepoint(true, 2024102401, 'local', 'enrollment_tokens');
     }
 
     if ($oldversion < 2024102201) {
